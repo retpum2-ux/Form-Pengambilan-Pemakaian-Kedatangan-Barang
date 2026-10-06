@@ -1,0 +1,6 @@
+{
+  "name": "KMI Wire & Cable - Form Pengambilan & Kedatangan Barang",
+  "description": "Aplikasi form pengambilan/pemakaian dan kedatangan barang PT KMI Wire and Cable Tbk dengan sinkronisasi Google Sheets, backend API, dan manajemen master data barang & U/M.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
