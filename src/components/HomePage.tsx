@@ -14,12 +14,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           PT KMI Wire and Cable Tbk
         </div>
 
-        {/* Centered Main Header */}
-        <div className="text-center my-6 sm:my-10 space-y-1 sm:space-y-2">
-          <h2 className="text-xl sm:text-2xl font-black text-black tracking-wider uppercase font-sans">
+        {/* Centered Main Header dengan garis dan warna gradasi */}
+        <div className="text-center my-6 sm:my-10 py-3.5 px-4 bg-gradient-to-r from-[#faeee0] via-[#f5dfca] to-[#faeee0] border-y-2 border-stone-800 rounded-lg shadow-2xs space-y-1 sm:space-y-2">
+          <h2 className="text-xl sm:text-2xl font-black text-stone-900 tracking-wider uppercase font-sans">
             FORM
           </h2>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-black text-black tracking-wide uppercase font-sans px-2 leading-tight">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-black text-stone-900 tracking-wide uppercase font-sans px-2 leading-tight">
             PENGAMBILAN DAN KEDATANGAN BARANG
           </h1>
         </div>
