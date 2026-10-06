@@ -72,15 +72,14 @@ export const ItemSearchDropdown: React.FC<ItemSearchDropdownProps> = ({
           className="w-full px-3 py-2 text-sm text-stone-900 bg-transparent placeholder-stone-400 focus:outline-none"
         />
 
-        {/* The [ V ] Button */}
+        {/* Dropdown Arrow Button */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 flex items-center justify-center font-mono font-semibold text-xs text-stone-700 hover:bg-stone-100 border-l border-stone-300 transition-colors select-none"
-          title="Buka daftar barang [ V ]"
+          className="px-3 py-2 flex items-center justify-center text-stone-600 hover:text-stone-900 hover:bg-stone-100 border-l border-stone-300 transition-colors select-none"
+          title="Buka daftar barang"
         >
-          <span className="text-[13px] tracking-widest font-mono">[ V ]</span>
-          <ChevronDown className={`w-3.5 h-3.5 ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
         </button>
       </div>
 

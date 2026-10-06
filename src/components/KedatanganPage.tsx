@@ -189,61 +189,59 @@ export const KedatanganPage: React.FC<KedatanganPageProps> = ({
         </button>
       </div>
 
-      {/* Main Form Frame with rounded-2xl */}
+      {/* Main Form Frame with rounded-2xl & Warna Background Lebih Cerah */}
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-[#e8f5e9] border border-stone-800 rounded-2xl shadow-md p-3 sm:p-6 space-y-4"
+        className="w-full max-w-2xl bg-[#f5fbf6] border border-stone-800 rounded-2xl shadow-md p-4 sm:p-8 pt-3 sm:pt-4 relative space-y-5"
       >
-        {/* ================= 1. BAGIAN JUDUL & HEADER (WARNA LEMBUT SAGE) ================= */}
-        <div className="bg-[#edf7ee] border border-stone-800/40 rounded-xl p-4 sm:p-5 shadow-2xs space-y-4">
-          {/* Top-left company label */}
-          <div className="text-left text-xs sm:text-sm font-semibold text-stone-600 tracking-wide">
-            PT KMI Wire and Cable Tbk
-          </div>
+        {/* ================= 1. BAGIAN JUDUL & HEADER (DI LUAR KOTAK) ================= */}
+        {/* Top-left company label - Mepet pojok atas kiri */}
+        <div className="text-left text-xs sm:text-sm font-semibold text-stone-600 tracking-wide">
+          PT KMI Wire and Cable Tbk
+        </div>
 
-          {/* Centered Main Header */}
-          <div className="text-center my-1 sm:my-2 space-y-1">
-            <h2 className="text-xl sm:text-2xl font-black text-black tracking-wider uppercase font-sans">
-              FORM
-            </h2>
-            <h1 className="text-base sm:text-xl font-black text-black tracking-wide uppercase font-sans px-2 leading-tight">
-              KEDATANGAN BARANG
-            </h1>
-          </div>
+        {/* Centered Main Header */}
+        <div className="text-center my-2 sm:my-4 space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-black tracking-wider uppercase font-sans">
+            FORM
+          </h2>
+          <h1 className="text-base sm:text-xl font-black text-black tracking-wide uppercase font-sans px-2 leading-tight">
+            KEDATANGAN BARANG
+          </h1>
+        </div>
 
-          {/* Feedback Alert with rounded-xl */}
-          {submitFeedback && (
-            <div
-              className={`p-3 border text-xs flex items-start gap-2 rounded-xl shadow-2xs ${
-                submitFeedback.success
-                  ? 'bg-emerald-50 border-emerald-400 text-emerald-900'
-                  : 'bg-red-50 border-red-400 text-red-900'
-              }`}
-            >
-              {submitFeedback.success ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-              )}
-              <div className="flex-1 space-y-1">
-                <p className="font-bold">{submitFeedback.message}</p>
-              </div>
+        {/* Feedback Alert with rounded-xl */}
+        {submitFeedback && (
+          <div
+            className={`p-3 border text-xs flex items-start gap-2 rounded-xl shadow-2xs ${
+              submitFeedback.success
+                ? 'bg-emerald-50 border-emerald-400 text-emerald-900'
+                : 'bg-red-50 border-red-400 text-red-900'
+            }`}
+          >
+            {submitFeedback.success ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 space-y-1">
+              <p className="font-bold">{submitFeedback.message}</p>
             </div>
-          )}
-
-          {/* Tanggal Input with rounded-lg */}
-          <div className="pt-1">
-            <label className="block text-sm sm:text-base font-bold text-black mb-1">
-              Tanggal :
-            </label>
-            <input
-              type="date"
-              required
-              value={tanggal}
-              onChange={(e) => setTanggal(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-stone-800 rounded-lg text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div>
+        )}
+
+        {/* Tanggal Input (Di luar kotak, langsung di form) */}
+        <div>
+          <label className="block text-sm sm:text-base font-bold text-black mb-1">
+            Tanggal :
+          </label>
+          <input
+            type="date"
+            required
+            value={tanggal}
+            onChange={(e) => setTanggal(e.target.value)}
+            className="w-full px-3 py-2 bg-white border border-stone-800 rounded-lg text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
 
         {/* ================= 2. BAGIAN KOTAK BARANG (WARNA PUTIH KONTRAS BERSIH) ================= */}

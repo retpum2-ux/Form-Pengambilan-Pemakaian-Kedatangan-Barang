@@ -31,16 +31,16 @@ export const UnitSelectDropdown: React.FC<UnitSelectDropdownProps> = ({
     setIsOpen(false);
   };
 
-  const displayText = value ? `[  ${value}  ]` : '[   U/M   ]';
+  const displayText = value ? value : 'U/M';
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Trigger styled with rounded corners (melengkung) */}
+      {/* Trigger styled with rounded corners without brackets */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2 bg-white border border-stone-800 rounded-lg hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs sm:text-sm font-semibold tracking-wider text-stone-800 text-center transition-colors select-none"
-        title="Pilih satuan [ U/M ]"
+        className="w-full flex items-center justify-between px-3 py-2 bg-white border border-stone-800 rounded-lg hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs sm:text-sm font-bold tracking-wider text-stone-800 text-center transition-colors select-none"
+        title="Pilih satuan U/M"
       >
         <span className="w-full text-center">{displayText}</span>
         <ChevronDown className={`w-3.5 h-3.5 ml-1 text-stone-600 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
