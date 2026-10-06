@@ -4,7 +4,7 @@ import { ItemEntryPengambilan, PengambilanFormData } from '../types';
 import { ItemSearchDropdown } from './ItemSearchDropdown';
 import { UnitSelectDropdown } from './UnitSelectDropdown';
 import { DAFTAR_BARANG, ItemBarang } from '../code/daftar-barang';
-import { DAFTAR_SATUAN } from '../code/daftar-satuan';
+import { DAFTAR_SATUAN, SatuanUnit } from '../code/daftar-satuan';
 
 interface PengambilanPageProps {
   onBack: () => void;
@@ -21,12 +21,31 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
   const [mesin, setMesin] = useState<string>('');
   const [namaPengambil, setNamaPengambil] = useState<string>('');
 
+  const [itemsList, setItemsList] = useState<ItemBarang[]>(DAFTAR_BARANG);
+  const [unitsList, setUnitsList] = useState<SatuanUnit[]>(DAFTAR_SATUAN);
+
+  React.useEffect(() => {
+    fetch('/api/csv/daftar-barang')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setItemsList(data);
+      })
+      .catch(() => {});
+
+    fetch('/api/csv/daftar-satuan')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setUnitsList(data);
+      })
+      .catch(() => {});
+  }, []);
+
   const [itemList, setItemList] = useState<ItemEntryPengambilan[]>([
     {
       id: `item-entry-1`,
       barang: '',
       qty: '',
-      unit: 'KG',
+      unit: DAFTAR_SATUAN[0]?.code || 'PCS',
       keterangan: '',
     },
   ]);
@@ -45,7 +64,7 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
         id: `item-entry-${Date.now()}`,
         barang: '',
         qty: '',
-        unit: 'KG',
+        unit: unitsList[0]?.code || 'PCS',
         keterangan: '',
       },
     ]);
@@ -288,7 +307,7 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
                   <ItemSearchDropdown
                     value={item.barang}
                     onChange={(val, itemObj) => handleUpdateItem(index, 'barang', val, itemObj)}
-                    items={DAFTAR_BARANG}
+                    items={itemsList}
                     placeholder="Cari / Pilih barang"
                     required={true}
                   />
@@ -313,7 +332,7 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
                     <UnitSelectDropdown
                       value={item.unit}
                       onChange={(unitCode) => handleUpdateItem(index, 'unit', unitCode)}
-                      units={DAFTAR_SATUAN}
+                      units={unitsList}
                     />
                   </div>
                 </div>

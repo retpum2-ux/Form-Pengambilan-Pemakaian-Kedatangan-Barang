@@ -1,31 +1,94 @@
 /**
- * Lightweight and robust CSV parser supporting quoted strings and commas
+ * Flexible CSV Parser for Items and Units
+ * Supports:
+ * 1. Standard CSV with headers (e.g. name,code,category,defaultUnit or code,name)
+ * 2. Simple plain text lists (1 item per line, no header, e.g. "Isolasi Kertas")
  */
-export function parseCSV(csvText: string): Record<string, string>[] {
+
+export interface ItemBarang {
+  name: string;
+  code?: string;
+  category?: string;
+  defaultUnit?: string;
+}
+
+export interface SatuanUnit {
+  code: string;
+  name: string;
+}
+
+export function parseItemsFromCSV(csvText: string): ItemBarang[] {
+  if (!csvText || !csvText.trim()) return [];
+
   const lines = csvText
     .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !line.startsWith('#'));
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith('#'));
 
-  if (lines.length < 2) return [];
+  if (lines.length === 0) return [];
 
-  // Parse header
-  const headers = parseCSVLine(lines[0]);
+  const firstLine = lines[0].toLowerCase();
+  const hasHeader =
+    firstLine.includes('name') ||
+    firstLine.includes('nama') ||
+    firstLine.includes('barang');
 
-  const results: Record<string, string>[] = [];
+  const startIndex = hasHeader ? 1 : 0;
+  const items: ItemBarang[] = [];
 
-  for (let i = 1; i < lines.length; i++) {
-    const values = parseCSVLine(lines[i]);
-    if (values.length === 0) continue;
+  for (let i = startIndex; i < lines.length; i++) {
+    const line = lines[i];
+    const cols = parseCSVLine(line);
 
-    const row: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      row[header.trim()] = (values[index] || '').trim();
-    });
-    results.push(row);
+    if (cols.length >= 1 && cols[0].trim().length > 0) {
+      items.push({
+        name: cols[0].trim(),
+        code: cols[1]?.trim() || undefined,
+        category: cols[2]?.trim() || undefined,
+        defaultUnit: cols[3]?.trim() || undefined,
+      });
+    }
   }
 
-  return results;
+  return items;
+}
+
+export function parseUnitsFromCSV(csvText: string): SatuanUnit[] {
+  if (!csvText || !csvText.trim()) return [];
+
+  const lines = csvText
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith('#'));
+
+  if (lines.length === 0) return [];
+
+  const firstLine = lines[0].toLowerCase();
+  const hasHeader =
+    firstLine.includes('code') ||
+    firstLine.includes('kode') ||
+    firstLine.includes('satuan') ||
+    firstLine.includes('u/m') ||
+    firstLine.includes('unit');
+
+  const startIndex = hasHeader ? 1 : 0;
+  const units: SatuanUnit[] = [];
+
+  for (let i = startIndex; i < lines.length; i++) {
+    const line = lines[i];
+    const cols = parseCSVLine(line);
+
+    if (cols.length >= 1 && cols[0].trim().length > 0) {
+      const codeVal = cols[0].trim().toUpperCase();
+      const nameVal = cols[1]?.trim() || cols[0].trim();
+      units.push({
+        code: codeVal,
+        name: nameVal,
+      });
+    }
+  }
+
+  return units;
 }
 
 function parseCSVLine(line: string): string[] {
@@ -39,7 +102,7 @@ function parseCSVLine(line: string): string[] {
     if (char === '"') {
       if (inQuotes && line[i + 1] === '"') {
         current += '"';
-        i++; // skip escaped quote
+        i++;
       } else {
         inQuotes = !inQuotes;
       }

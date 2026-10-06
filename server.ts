@@ -92,8 +92,120 @@ app.post('/api/settings', (req: Request, res: Response) => {
   res.json({ success: true, settings: appSettings });
 });
 
+// Master Items (Live CSV)
+function getLiveDaftarBarang() {
+  const rootPath = path.join(__dirname, 'code', 'daftar-barang.csv');
+  const srcPath = path.join(__dirname, 'src', 'code', 'daftar-barang.csv');
+  
+  // Prefer the file with latest modification or whichever exists
+  let targetPath = fs.existsSync(rootPath) ? rootPath : srcPath;
+  if (!fs.existsSync(targetPath)) return [];
+
+  // Sync between code/ and src/code/ if one was updated
+  try {
+    const content = fs.readFileSync(targetPath, 'utf-8');
+    if (fs.existsSync(rootPath) && fs.existsSync(srcPath)) {
+      const rootStat = fs.statSync(rootPath);
+      const srcStat = fs.statSync(srcPath);
+      if (rootStat.mtimeMs > srcStat.mtimeMs) {
+        fs.writeFileSync(srcPath, content, 'utf-8');
+      } else if (srcStat.mtimeMs > rootStat.mtimeMs) {
+        fs.writeFileSync(rootPath, fs.readFileSync(srcPath, 'utf-8'), 'utf-8');
+      }
+    }
+
+    const lines = content
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0 && !l.startsWith('#'));
+
+    if (lines.length === 0) return [];
+    const firstLine = lines[0].toLowerCase();
+    const hasHeader =
+      firstLine.includes('name') || firstLine.includes('nama') || firstLine.includes('barang');
+    const start = hasHeader ? 1 : 0;
+    const items = [];
+
+    for (let i = start; i < lines.length; i++) {
+      const cols = lines[i].split(',').map((c) => c.trim().replace(/^"|"$/g, ''));
+      if (cols[0] && cols[0].length > 0) {
+        items.push({
+          name: cols[0],
+          code: cols[1] || undefined,
+          category: cols[2] || undefined,
+          defaultUnit: cols[3] || undefined,
+        });
+      }
+    }
+    return items;
+  } catch (err) {
+    console.error('Error reading live barang CSV:', err);
+    return [];
+  }
+}
+
+function getLiveDaftarSatuan() {
+  const rootPath = path.join(__dirname, 'code', 'daftar-satuan.csv');
+  const srcPath = path.join(__dirname, 'src', 'code', 'daftar-satuan.csv');
+
+  let targetPath = fs.existsSync(rootPath) ? rootPath : srcPath;
+  if (!fs.existsSync(targetPath)) return [];
+
+  try {
+    const content = fs.readFileSync(targetPath, 'utf-8');
+    if (fs.existsSync(rootPath) && fs.existsSync(srcPath)) {
+      const rootStat = fs.statSync(rootPath);
+      const srcStat = fs.statSync(srcPath);
+      if (rootStat.mtimeMs > srcStat.mtimeMs) {
+        fs.writeFileSync(srcPath, content, 'utf-8');
+      } else if (srcStat.mtimeMs > rootStat.mtimeMs) {
+        fs.writeFileSync(rootPath, fs.readFileSync(srcPath, 'utf-8'), 'utf-8');
+      }
+    }
+
+    const lines = content
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0 && !l.startsWith('#'));
+
+    if (lines.length === 0) return [];
+    const firstLine = lines[0].toLowerCase();
+    const hasHeader =
+      firstLine.includes('code') ||
+      firstLine.includes('kode') ||
+      firstLine.includes('satuan') ||
+      firstLine.includes('unit');
+    const start = hasHeader ? 1 : 0;
+    const units = [];
+
+    for (let i = start; i < lines.length; i++) {
+      const cols = lines[i].split(',').map((c) => c.trim().replace(/^"|"$/g, ''));
+      if (cols[0] && cols[0].length > 0) {
+        units.push({
+          code: cols[0].toUpperCase(),
+          name: cols[1] || cols[0],
+        });
+      }
+    }
+    return units;
+  } catch (err) {
+    console.error('Error reading live satuan CSV:', err);
+    return [];
+  }
+}
+
+app.get('/api/csv/daftar-barang', (_req: Request, res: Response) => {
+  res.json(getLiveDaftarBarang());
+});
+
+app.get('/api/csv/daftar-satuan', (_req: Request, res: Response) => {
+  res.json(getLiveDaftarSatuan());
+});
+
 // Master Items
 app.get('/api/master/items', (_req: Request, res: Response) => {
+  const live = getLiveDaftarBarang();
+  if (live.length > 0) return res.json(live);
   res.json(masterItems);
 });
 
@@ -108,6 +220,8 @@ app.post('/api/master/items', (req: Request, res: Response) => {
 
 // Master Units
 app.get('/api/master/units', (_req: Request, res: Response) => {
+  const live = getLiveDaftarSatuan();
+  if (live.length > 0) return res.json(live);
   res.json(masterUnits);
 });
 
