@@ -176,14 +176,14 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
   };
 
   return (
-    // Corner layout with rounded elements (melengkung)
-    <div className="w-full flex flex-col items-start justify-start p-2 sm:p-4 animate-in fade-in">
-      {/* Top minimal back control with rounded corner */}
-      <div className="mb-2">
+    // Centered layout for mobile and desktop
+    <div className="w-full min-h-screen flex flex-col items-center justify-start sm:justify-center p-3 sm:p-6 animate-in fade-in">
+      {/* Top minimal back control centered with form */}
+      <div className="w-full max-w-2xl mb-2 flex justify-start">
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-white border border-stone-800 rounded-lg hover:bg-stone-100 transition-colors shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-white border border-stone-800 rounded-lg hover:bg-stone-100 transition-colors shadow-2xs cursor-pointer"
           title="Kembali ke Halaman Utama"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
@@ -368,11 +368,8 @@ export const PengambilanPage: React.FC<PengambilanPageProps> = ({
             </button>
           </div>
 
-          {/* Garis samar pemisah antara Tambah Barang dan SIMPAN */}
-          <hr className="border-t border-stone-500/40 my-2" />
-
           {/* Button: SIMPAN */}
-          <div>
+          <div className="pt-1">
             <button
               type="submit"
               disabled={isSubmitting}

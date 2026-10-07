@@ -9,9 +9,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     <div className="w-full flex flex-col items-center justify-center p-3 sm:p-6 animate-in fade-in">
       {/* Outer Container matching PDF Image 1 */}
       <div className="w-full max-w-xl bg-[#faeee0] border border-stone-800 shadow-md p-6 sm:p-10 pt-3 sm:pt-4 relative">
-        {/* Top-left company label - Mepet pojok atas as requested */}
-        <div className="text-left text-xs sm:text-sm font-semibold text-stone-600 mb-6 sm:mb-8 tracking-wide">
-          PT KMI Wire and Cable Tbk
+        {/* Top row: Company label (Left) & KMI1 (Right Corner) */}
+        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold mb-6 sm:mb-8 tracking-wide">
+          <span className="text-stone-600">PT KMI Wire and Cable Tbk</span>
+          <span className="text-stone-800 font-bold tracking-wide">
+            KMI1
+          </span>
         </div>
 
         {/* Centered Main Header dengan garis dan warna gradasi */}
